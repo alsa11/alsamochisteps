@@ -1,0 +1,64 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Global helper functions
+    function isSignedIn() {
+      return request.auth != null;
+    }
+    
+    function isAdmin() {
+      return isSignedIn() && (
+        request.auth.token.email == 'kirakirani57@gmail.com' ||
+        request.auth.token.email == 'admin@mochisteps.com' ||
+        request.auth.token.email == 'rnyamukk971@gmail.com' ||
+        exists(/databases/$(database)/documents/admins/$(request.auth.uid))
+      );
+    }
+
+    // Default deny
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Admins collection
+    match /admins/{adminId} {
+      allow read: if isSignedIn();
+      allow write: if isAdmin();
+    }
+
+    // Products catalog
+    // Public read so shoppers can browse flatshoes without signing in
+    match /products/{productId} {
+      allow read: if true;
+      allow write: if true;
+    }
+
+    // Customer Orders
+    match /orders/{orderId} {
+      allow read: if true;
+      allow create: if true;
+      allow update, delete: if true;
+    }
+
+    // POS Kasir Transactions
+    match /pos_transactions/{posId} {
+      allow read: if true;
+      allow create: if true;
+      allow update, delete: if true;
+    }
+
+    // Customers collection
+    match /customers/{customerId} {
+      allow read: if true;
+      allow write: if true;
+    }
+
+    // Stock Mutations
+    match /stock_mutations/{mutationId} {
+      allow read: if true;
+      allow write: if true;
+    }
+  }
+}

@@ -1,0 +1,133 @@
+{
+  "entities": {
+    "Product": {
+      "title": "Product",
+      "description": "Flatshoes product item in Mochi Steps catalog",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "name": { "type": "string", "maxLength": 100 },
+        "category": { "type": "string", "maxLength": 50 },
+        "costPrice": { "type": "number" },
+        "price": { "type": "number" },
+        "stock": { "type": "number" },
+        "sizes": { "type": "array" },
+        "description": { "type": "string", "maxLength": 1000 },
+        "imageUrl": { "type": "string", "maxLength": 500 },
+        "color": { "type": "string", "maxLength": 50 },
+        "badge": { "type": "string", "maxLength": 50 },
+        "rating": { "type": "number" },
+        "reviewCount": { "type": "number" },
+        "material": { "type": "string", "maxLength": 100 },
+        "heelHeight": { "type": "string", "maxLength": 50 },
+        "sku": { "type": "string", "maxLength": 50 },
+        "isActive": { "type": "boolean" },
+        "createdAt": { "type": "string", "maxLength": 50 },
+        "updatedAt": { "type": "string", "maxLength": 50 }
+      },
+      "required": ["name", "category", "price", "stock", "description", "imageUrl"]
+    },
+    "Order": {
+      "title": "Order",
+      "description": "Customer purchase order",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "orderNumber": { "type": "string", "maxLength": 64 },
+        "customerName": { "type": "string", "maxLength": 100 },
+        "customerPhone": { "type": "string", "maxLength": 30 },
+        "customerAddress": { "type": "string", "maxLength": 300 },
+        "district": { "type": "string", "maxLength": 100 },
+        "city": { "type": "string", "maxLength": 100 },
+        "postalCode": { "type": "string", "maxLength": 20 },
+        "specialNotes": { "type": "string", "maxLength": 500 },
+        "courier": { "type": "string", "maxLength": 50 },
+        "trackingNumber": { "type": "string", "maxLength": 100 },
+        "paymentMethod": { "type": "string", "maxLength": 50 },
+        "paymentStatus": { "type": "string", "maxLength": 50 },
+        "orderStatus": { "type": "string", "maxLength": 50 },
+        "items": { "type": "array" },
+        "totalAmount": { "type": "number" },
+        "subtotal": { "type": "number" },
+        "shippingCost": { "type": "number" },
+        "createdAt": { "type": "string", "maxLength": 50 },
+        "updatedAt": { "type": "string", "maxLength": 50 }
+      },
+      "required": ["orderNumber", "customerName", "customerPhone", "customerAddress", "paymentMethod", "totalAmount", "items"]
+    },
+    "PosTransaction": {
+      "title": "PosTransaction",
+      "description": "Physical cashier POS transaction at Mochi Steps store",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "posNumber": { "type": "string", "maxLength": 64 },
+        "cashierName": { "type": "string", "maxLength": 100 },
+        "customerName": { "type": "string", "maxLength": 100 },
+        "items": { "type": "array" },
+        "totalItems": { "type": "number" },
+        "totalAmount": { "type": "number" },
+        "totalCost": { "type": "number" },
+        "grossProfit": { "type": "number" },
+        "paymentMethod": { "type": "string", "maxLength": 50 },
+        "cashTendered": { "type": "number" },
+        "changeGiven": { "type": "number" },
+        "notes": { "type": "string", "maxLength": 200 },
+        "createdAt": { "type": "string", "maxLength": 50 }
+      },
+      "required": ["posNumber", "cashierName", "items", "totalAmount", "paymentMethod"]
+    },
+    "StockMutation": {
+      "title": "StockMutation",
+      "description": "Real-time inventory stock movement log",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "productId": { "type": "string", "maxLength": 128 },
+        "productName": { "type": "string", "maxLength": 100 },
+        "type": { "type": "string", "maxLength": 20 },
+        "quantity": { "type": "number" },
+        "notes": { "type": "string", "maxLength": 200 },
+        "previousStock": { "type": "number" },
+        "newStock": { "type": "number" },
+        "referenceId": { "type": "string", "maxLength": 128 },
+        "timestamp": { "type": "string", "maxLength": 50 },
+        "actor": { "type": "string", "maxLength": 100 }
+      },
+      "required": ["productId", "productName", "type", "quantity", "notes", "newStock"]
+    },
+    "Admin": {
+      "title": "Admin",
+      "description": "Admin privileges record",
+      "type": "object",
+      "properties": {
+        "email": { "type": "string", "maxLength": 100 },
+        "role": { "type": "string", "maxLength": 30 },
+        "createdAt": { "type": "string", "maxLength": 50 }
+      },
+      "required": ["email", "role"]
+    }
+  },
+  "firestore": {
+    "/products/{productId}": {
+      "schema": "Product",
+      "description": "Catalog of flatshoes products"
+    },
+    "/orders/{orderId}": {
+      "schema": "Order",
+      "description": "Customer orders and payment verification"
+    },
+    "/pos_transactions/{posId}": {
+      "schema": "PosTransaction",
+      "description": "In-store cashier point of sale transactions"
+    },
+    "/stock_mutations/{mutationId}": {
+      "schema": "StockMutation",
+      "description": "Stock in and out mutation log"
+    },
+    "/admins/{adminId}": {
+      "schema": "Admin",
+      "description": "Authorized administrators"
+    }
+  }
+}
